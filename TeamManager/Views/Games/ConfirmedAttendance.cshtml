@@ -1,0 +1,18 @@
+﻿@model TeamManager.Models.GameViewModel
+
+@{
+    ViewBag.Title = "Confirm Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Confirm Attendance</h2>
+
+<div class="alert alert-success">
+    <strong>Success!</strong> 
+    @Html.DisplayFor(model => model.Player_Game.Player.FullName)
+    has been confirmed for 
+    @Html.DisplayFor(model => model.Player_Game.Game.Location)
+    at
+    @Html.DisplayFor(model => model.Player_Game.Game.GameDateTime)
+</div>
+

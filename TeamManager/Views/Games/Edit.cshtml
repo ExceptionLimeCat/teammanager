@@ -1,0 +1,118 @@
+﻿@model TeamManager.Models.GameViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Game</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Game.GameId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Game.GameDateTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Game.GameDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Game.GameDateTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Game.Location, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Game.Location, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Game.Location, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Game.Updated, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Game.Updated, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Game.Updated, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Game.UpdatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Game.UpdatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Game.UpdatedBy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div>
+            <div class="col-md-4">
+                <ul id="availablePlayers" class="list-group">
+                    <li class="list-group-item list-group-item-success">Available Players</li>
+
+                    @foreach (var item in Model.PlayersUnconfirmed)
+                    {
+                        <li onclick="selectAvailElm(this)" class="list-group-item" data-player-id="@item.PlayerId">
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul style="list-style:none;text-align:center;">
+                    <li>
+                        <div class="btn btn-primary">
+                            @*@Html.ActionLink("Test", "ConfirmPlayer", "Games", new { id = "_playerid" }, new { @class = "glyphicon glyphicon-arrow-right" }) @*new { GameId = Model.Game.GameId, PlayerId = "_playerid" },*@
+                            <span id="confirmPlayer" class="glyphicon glyphicon-arrow-right"></span>
+                        </div>
+                        @Html.HiddenFor(model => model.Player_Game.GameId)
+                        @Html.HiddenFor(model => model.Player_Game.PlayerId)
+                        @Html.Hidden("confirmUrl", @Url.Action("ConfirmPlayer", "Games"), new { id = "confirmUrl" })                        
+                    </li>
+                    <li>
+                        <div class="btn btn-primary">
+                            <span id="unconfirmPlayer" class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                        </div>
+                        @Html.Hidden("unconfirmUrl", @Url.Action("UnconfirmPlayer", "Games"), new { id = "unconfirmUrl" })
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul id="confirmedPlayers" class="list-group">
+                    <li class="list-group-item list-group-item-success">Confirmed Players</li>
+                    
+                    @foreach (var item in Model.PlayersIn)
+                    {
+                        <li onclick="selectConfirmedElm(this)" class="list-group-item" 
+                            data-player-game-id="@item.Player_Game_Id"
+                            data-player-id="@item.PlayerId">
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    
+</script>

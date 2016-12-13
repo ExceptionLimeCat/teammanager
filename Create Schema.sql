@@ -1,0 +1,41 @@
+﻿CREATE TABLE Game(
+	GameId INT IDENTITY(1,1) PRIMARY KEY,
+	GameDateTime DATETIME,
+	[Location] VARCHAR(100),
+	Updated DATETIME,
+	UpdatedBy VARCHAR(100)
+);
+
+CREATE TABLE Player(
+	PlayerId INT IDENTITY(1,1) PRIMARY KEY,
+	FirstName VARCHAR(100),
+	LastName VARCHAR(100),
+	Phone VARCHAR(50),
+	Email VARCHAR(50),
+	Paid BIT,
+	ShirtSize VARCHAR(20),
+	ShortsSize VARCHAR(20),
+	Updated DATETIME,
+	UpdatedBy VARCHAR(100)
+);
+
+CREATE TABLE Player_Game(
+	Player_Game_Id INT IDENTITY(1,1) PRIMARY KEY,
+	PlayerId INT FOREIGN KEY REFERENCES Player(PlayerId),
+	GameId INT FOREIGN KEY REFERENCES Game(GameId),
+	Updated DATETIME,
+	UpdatedBy VARCHAR(100)
+);
+
+CREATE TABLE SentMessage(
+	SentMessageId INT IDENTITY(1,1) PRIMARY KEY,
+	PlayerId INT FOREIGN KEY REFERENCES Player(PlayerId),
+	GameId INT FOREIGN KEY REFERENCES Game(GameId),
+	MessageBody VARCHAR(MAX),
+	Sender VARCHAR(100),
+	SentTimeStamp DATETIME,
+	Response VARCHAR(255),
+	Updated DATETIME
+);
+
+

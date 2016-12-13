@@ -1,0 +1,16 @@
+﻿@model IEnumerable<TeamManager.Models.Game>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Team Manager</h1>
+    <p class="lead">This application is used to manage attendance for soccer games.</p>    
+</div>
+
+<div class="row">
+    <div class="col-md-12">        
+        @Html.Partial("_UpcomingGames", Model)
+    </div>    
+</div>

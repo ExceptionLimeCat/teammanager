@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TeamManager.Models.Game>
+
+@{
+    ViewBag.Title = "Upcoming Games";
+}
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Upcoming Games</div>
+    <div class="panel-body">
+        
+    </div>
+
+    <!-- Table -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Game Time</th>
+                <th>Location</th>
+                <th>Confirmed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (item.GameDateTime > DateTime.Now)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GameDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Location)
+                        </td>
+                        <td>
+                            <span class="badge">
+                                @Html.DisplayFor(modelItem => item.Player_Game.Count)
+                            </span>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Details", "Details", "Games", new { id = item.GameId }, new { @class = "btn btn-primary" })
+                        </td>
+                    </tr>
+                  }
+                }
+        </tbody>        
+    </table>
+</div>

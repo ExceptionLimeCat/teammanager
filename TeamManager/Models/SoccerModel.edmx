@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SoccerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="GameId" />
+          </Key>
+          <Property Name="GameId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GameDateTime" Type="datetime" />
+          <Property Name="Location" Type="varchar" MaxLength="100" />
+          <Property Name="Updated" Type="datetime" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="100" />
+          <Property Name="SendEmail" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="100" />
+          <Property Name="LastName" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Paid" Type="bit" />
+          <Property Name="ShirtSize" Type="varchar" MaxLength="20" />
+          <Property Name="ShortsSize" Type="varchar" MaxLength="20" />
+          <Property Name="Updated" Type="datetime" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Player_Game">
+          <Key>
+            <PropertyRef Name="Player_Game_Id" />
+          </Key>
+          <Property Name="Player_Game_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerId" Type="int" />
+          <Property Name="GameId" Type="int" />
+          <Property Name="Updated" Type="datetime" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SentMessage">
+          <Key>
+            <PropertyRef Name="SentMessageId" />
+          </Key>
+          <Property Name="SentMessageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="MessageBody" Type="varchar(max)" />
+          <Property Name="Sender" Type="varchar" MaxLength="100" />
+          <Property Name="SentTimeStamp" Type="datetime" />
+          <Property Name="Response" Type="varchar" MaxLength="255" />
+          <Property Name="Updated" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Player_Ga__GameI__3B75D760">
+          <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+          <End Role="Player_Game" Type="Self.Player_Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="Player_Game">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Player_Ga__Playe__3A81B327">
+          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+          <End Role="Player_Game" Type="Self.Player_Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Player_Game">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Game">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="SentMessage" Type="Self.SentMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="SentMessage">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Player">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="SentMessage" Type="Self.SentMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="SentMessage">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SoccerModelStoreContainer">
+          <EntitySet Name="Game" EntityType="Self.Game" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Player_Game" EntityType="Self.Player_Game" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SentMessage" EntityType="Self.SentMessage" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Player_Ga__GameI__3B75D760" Association="Self.FK__Player_Ga__GameI__3B75D760">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="Player_Game" EntitySet="Player_Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Player_Ga__Playe__3A81B327" Association="Self.FK__Player_Ga__Playe__3A81B327">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Player_Game" EntitySet="Player_Game" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Game" Association="Self.fk_Game">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="SentMessage" EntitySet="SentMessage" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Player" Association="Self.fk_Player">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="SentMessage" EntitySet="SentMessage" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SoccerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SoccerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Players" EntityType="SoccerModel.Player" />
+          <EntitySet Name="Player_Game" EntityType="SoccerModel.Player_Game" />
+          <AssociationSet Name="FK__Player_Ga__Playe__3A81B327" Association="SoccerModel.FK__Player_Ga__Playe__3A81B327">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Player_Game" EntitySet="Player_Game" />
+          </AssociationSet>
+          <EntitySet Name="SentMessages" EntityType="SoccerModel.SentMessage" />
+          <AssociationSet Name="fk_Player" Association="SoccerModel.fk_Player">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="SentMessage" EntitySet="SentMessages" />
+          </AssociationSet>
+          <EntitySet Name="Games" EntityType="SoccerModel.Game" />
+          <AssociationSet Name="FK__Player_Ga__GameI__3B75D760" Association="SoccerModel.FK__Player_Ga__GameI__3B75D760">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="Player_Game" EntitySet="Player_Game" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Game" Association="SoccerModel.fk_Game">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="SentMessage" EntitySet="SentMessages" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Paid" Type="Boolean" />
+          <Property Name="ShirtSize" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ShortsSize" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="Player_Game" Relationship="SoccerModel.FK__Player_Ga__Playe__3A81B327" FromRole="Player" ToRole="Player_Game" />
+          <NavigationProperty Name="SentMessages" Relationship="SoccerModel.fk_Player" FromRole="Player" ToRole="SentMessage" />
+        </EntityType>
+        <EntityType Name="Player_Game">
+          <Key>
+            <PropertyRef Name="Player_Game_Id" />
+          </Key>
+          <Property Name="Player_Game_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerId" Type="Int32" />
+          <Property Name="GameId" Type="Int32" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Player" Relationship="SoccerModel.FK__Player_Ga__Playe__3A81B327" FromRole="Player_Game" ToRole="Player" />
+          <NavigationProperty Name="Game" Relationship="SoccerModel.FK__Player_Ga__GameI__3B75D760" FromRole="Player_Game" ToRole="Game" />
+        </EntityType>
+        <Association Name="FK__Player_Ga__Playe__3A81B327">
+          <End Type="SoccerModel.Player" Role="Player" Multiplicity="0..1" />
+          <End Type="SoccerModel.Player_Game" Role="Player_Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Player_Game">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SentMessage">
+          <Key>
+            <PropertyRef Name="SentMessageId" />
+          </Key>
+          <Property Name="SentMessageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="MessageBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Sender" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SentTimeStamp" Type="DateTime" Precision="3" />
+          <Property Name="Response" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Player" Relationship="SoccerModel.fk_Player" FromRole="SentMessage" ToRole="Player" />
+          <NavigationProperty Name="Game" Relationship="SoccerModel.fk_Game" FromRole="SentMessage" ToRole="Game" />
+        </EntityType>
+        <Association Name="fk_Player">
+          <End Type="SoccerModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="SoccerModel.SentMessage" Role="SentMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="SentMessage">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="GameId" />
+          </Key>
+          <Property Name="GameId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GameDateTime" Type="DateTime" Precision="3" />
+          <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SendEmail" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Player_Game" Relationship="SoccerModel.FK__Player_Ga__GameI__3B75D760" FromRole="Game" ToRole="Player_Game" />
+          <NavigationProperty Name="SentMessages" Relationship="SoccerModel.fk_Game" FromRole="Game" ToRole="SentMessage" />
+        </EntityType>
+        <Association Name="FK__Player_Ga__GameI__3B75D760">
+          <End Type="SoccerModel.Game" Role="Game" Multiplicity="0..1" />
+          <End Type="SoccerModel.Player_Game" Role="Player_Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="Player_Game">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Game">
+          <End Type="SoccerModel.Game" Role="Game" Multiplicity="1" />
+          <End Type="SoccerModel.SentMessage" Role="SentMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="SentMessage">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SoccerModelStoreContainer" CdmEntityContainer="SoccerEntities">
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="SoccerModel.Player">
+              <MappingFragment StoreEntitySet="Player">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="ShortsSize" ColumnName="ShortsSize" />
+                <ScalarProperty Name="ShirtSize" ColumnName="ShirtSize" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Player_Game">
+            <EntityTypeMapping TypeName="SoccerModel.Player_Game">
+              <MappingFragment StoreEntitySet="Player_Game">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="Player_Game_Id" ColumnName="Player_Game_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SentMessages">
+            <EntityTypeMapping TypeName="SoccerModel.SentMessage">
+              <MappingFragment StoreEntitySet="SentMessage">
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="Response" ColumnName="Response" />
+                <ScalarProperty Name="SentTimeStamp" ColumnName="SentTimeStamp" />
+                <ScalarProperty Name="Sender" ColumnName="Sender" />
+                <ScalarProperty Name="MessageBody" ColumnName="MessageBody" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="SentMessageId" ColumnName="SentMessageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="SoccerModel.Game">
+              <MappingFragment StoreEntitySet="Game">
+                <ScalarProperty Name="SendEmail" ColumnName="SendEmail" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="GameDateTime" ColumnName="GameDateTime" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

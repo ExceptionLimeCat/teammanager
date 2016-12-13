@@ -1,0 +1,87 @@
+﻿@model TeamManager.Models.GameViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="row">
+    <h4>Game</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Game.GameDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Game.GameDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Game.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Game.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Game.Updated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Game.Updated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Game.UpdatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Game.UpdatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastSentMsg.SentTimeStamp)
+        </dt>
+        @if (Model.LastSentMsg != null)
+        {
+        <dd>
+            @Html.DisplayFor(model => model.LastSentMsg.SentTimeStamp)
+        </dd>
+        }
+    </dl>
+</div>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-4">
+        <h4>Confirmed</h4>
+        <ul>            
+            @foreach (var item in Model.Game.Player_Game)
+            {
+                <li>@Html.DisplayFor(modelItem => item.Player.FullName)</li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4>Not Attending</h4>
+        <ul>
+            @foreach (var item in Model.Game.SentMessages)
+            {
+                if (item.Response == "-1")
+                {
+                    <li>@Html.DisplayFor(modelItem => item.Player.FullName)</li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Game.GameId }) |
+    @Html.ActionLink("Email Unconfirmed", "EmailUnconfirmed", new {  id = Model.Game.GameId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
